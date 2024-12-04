@@ -1,0 +1,18 @@
+/* src/App.css */
+
+.App {
+  text-align: center;
+  padding: 20px;
+}
+
+.input-field {
+  padding: 10px;
+  margin: 10px;
+  width: 300px;
+}
+
+.btn {
+  margin: 10px;
+}
+
+/* Add more styles as needed */
