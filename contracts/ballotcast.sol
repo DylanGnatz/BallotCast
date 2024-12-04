@@ -4,7 +4,8 @@ pragma solidity ^0.8.0;
 contract BallotCast {
     struct Voter {
         bool isRegistered;
-        bool hasVoted;
+        bool hasCommitted;
+        bool hasRevealed;
         bytes32 voteCommitment; // Commit hash of the vote
     }
 
@@ -18,6 +19,7 @@ contract BallotCast {
     bool public revealPhaseActive;
     mapping(address => Voter) public voters;
     Candidate[] public candidates;
+    address[] public voterAddresses; // Array to keep track of voter addresses
 
     event VoterRegistered(address voter);
     event CandidateAdded(string name);
@@ -54,7 +56,8 @@ contract BallotCast {
     // Admin-only function to register voters
     function registerVoter(address _voter) external onlyAdmin {
         require(!voters[_voter].isRegistered, "Voter is already registered");
-        voters[_voter] = Voter(true, false, bytes32(0));
+        voters[_voter] = Voter(true, false, false, bytes32(0));
+        voterAddresses.push(_voter); // Keep track of voter addresses
         emit VoterRegistered(_voter);
     }
 
@@ -85,18 +88,27 @@ contract BallotCast {
         revealPhaseActive = false;
         emit RevealPhaseStatusChanged(false);
         emit TallyCompleted();
+
+        // Reset voter statuses for the next voting session
+        for (uint256 i = 0; i < voterAddresses.length; i++) {
+            address voterAddress = voterAddresses[i];
+            voters[voterAddress].hasCommitted = false;
+            voters[voterAddress].hasRevealed = false;
+            voters[voterAddress].voteCommitment = bytes32(0);
+        }
     }
 
     // Voter commits their vote
     function commitVote(bytes32 _voteCommitment) external onlyRegistered onlyDuringCommitPhase {
-        require(!voters[msg.sender].hasVoted, "You have already committed your vote");
+        require(!voters[msg.sender].hasCommitted, "You have already committed your vote");
         voters[msg.sender].voteCommitment = _voteCommitment;
+        voters[msg.sender].hasCommitted = true;
         emit VoteCommitted(msg.sender);
     }
 
     // Voter reveals their vote
     function revealVote(uint256 _candidateIndex, string memory _nonce) external onlyRegistered onlyDuringRevealPhase {
-        require(!voters[msg.sender].hasVoted, "You have already revealed your vote");
+        require(!voters[msg.sender].hasRevealed, "You have already revealed your vote");
         require(_candidateIndex < candidates.length, "Invalid candidate index");
 
         // Verify the commitment
@@ -104,7 +116,7 @@ contract BallotCast {
         require(computedHash == voters[msg.sender].voteCommitment, "Vote commitment does not match");
 
         // Count the vote
-        voters[msg.sender].hasVoted = true;
+        voters[msg.sender].hasRevealed = true;
         candidates[_candidateIndex].voteCount++;
         emit VoteRevealed(msg.sender, _candidateIndex);
     }
