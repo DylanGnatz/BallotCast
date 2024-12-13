@@ -103,15 +103,7 @@ Replace `0xYourContractAddress` with the actual deployed contract address.
 
 ## **Frontend Setup**
 
-### **1. Configure the Contract Address**
-
-In the `frontend/src/config.js` file, add your deployed contract address:
-
-```javascript
-export const CONTRACT_ADDRESS = "0xYourContractAddress";
-```
-
-### **2. Start the Frontend App**
+### Start the Frontend App**
 
 Navigate to the `frontend` directory and start the React app:
 
