@@ -161,8 +161,16 @@ After connecting your wallet, you will be prompted or able to input the deployed
   - End the reveal phase.
 
 - **Voter Actions**:
-  - Commit a vote.
-  - Reveal a vote.
+   Commit Phase:
+   voter's commitment = keccak256(voterAddress + candidateIndex + nonce)
+   └── Only the hash is stored on-chain. No one can determine the vote because:
+       - The nonce adds randomness
+       - keccak256 is a one-way function
+   
+   Reveal Phase:
+   voter reveals: (candidateIndex, nonce)
+   contract computes: keccak256(voterAddress + candidateIndex + nonce)
+   └── Matches against stored commitment
 
 ---
 
