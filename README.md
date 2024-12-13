@@ -170,7 +170,7 @@ After connecting your wallet, you will be prompted or able to input the deployed
    - Reveal Phase:
        - voter reveals: (candidateIndex, nonce)
        - contract computes: keccak256(voterAddress + candidateIndex + nonce)
-       - Matches against stored commitment
+       - Matches against stored commitment <br />
 
   * The commit-reveal scheme is a feature that ensures that votes are kept hidden until the election administrator starts the reveal phase. Also voting may only commence when the administrator starts the commit phase, which is ended once the reveal phase it started.
 
