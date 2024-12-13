@@ -156,21 +156,23 @@ After connecting your wallet, you will be prompted or able to input the deployed
 - **Admin Actions**:
   - Register voters.
   - Add candidates.
-  - Start the commit phase.
-  - Start the reveal phase.
-  - End the reveal phase.
+  - Start the commit phase. (Only available in backend)
+  - Start the reveal phase \ end commit phase. (Only available in backend)
 
 - **Voter Actions**:
-   Commit Phase:
+   - Commit Phase:
    voter's commitment = keccak256(voterAddress + candidateIndex + nonce)
-   └── Only the hash is stored on-chain. No one can determine the vote because:
-       - The nonce adds randomness
-       - keccak256 is a one-way function
+       - Only the hash is stored on-chainso that no one can determine the vote.
+       - The nonce adds randomness.
+       - keccak256 is a one-way function.
+       - Commitment includes voterAddress to prevent replay attacks
    
-   Reveal Phase:
-   voter reveals: (candidateIndex, nonce)
-   contract computes: keccak256(voterAddress + candidateIndex + nonce)
-   └── Matches against stored commitment
+   - Reveal Phase:
+       - voter reveals: (candidateIndex, nonce)
+       - contract computes: keccak256(voterAddress + candidateIndex + nonce)
+       - Matches against stored commitment
+
+  * The commit-reveal scheme is a feature that ensures that votes are kept hidden until the election administrator starts the reveal phase. Also voting may only commence when the administrator starts the commit phase, which is ended once the reveal phase it started.
 
 ---
 
@@ -178,7 +180,7 @@ After connecting your wallet, you will be prompted or able to input the deployed
 
 ### Backend
 
-- `contracts/`: Contains the Solidity smart contract (`BallotCast.sol`).
+- `contracts/`: Contains the Solidity smart contract (`BallotCast.sol`) along with a commit-reveal scheme.
 - `scripts/`: Deployment scripts for Hardhat.
 - `hardhat.config.js`: Hardhat configuration file.
 
