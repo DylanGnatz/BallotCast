@@ -4,7 +4,7 @@ const { ethers } = require("ethers");
 
 async function registerVoter(contractAddress, voterAddress) {
     const provider = new ethers.providers.JsonRpcProvider(process.env.TESTNET_RPC_URL);
-    const wallet = new ethers.Wallet(process.env.ADMIN_PRIVATE_KEY, provider);
+    const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
     const contract = new ethers.Contract(contractAddress, BallotCastABI, wallet);
 
     const tx = await contract.registerVoter(voterAddress);

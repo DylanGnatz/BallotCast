@@ -112,7 +112,7 @@ contract BallotCast {
         require(_candidateIndex < candidates.length, "Invalid candidate index");
 
         // Verify the commitment
-        bytes32 computedHash = keccak256(abi.encodePacked(_candidateIndex, _nonce));
+        bytes32 computedHash = keccak256(abi.encodePacked(msg.sender, _candidateIndex, _nonce));
         require(computedHash == voters[msg.sender].voteCommitment, "Vote commitment does not match");
 
         // Count the vote
