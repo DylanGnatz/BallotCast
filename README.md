@@ -1,7 +1,7 @@
 
 # BallotCast Voting System
 
-BallotCast is a decentralized voting system built on the Ethereum Sepolia testnet using a Solidity smart contract and a React frontend application. This README provides step-by-step instructions to set up the project, deploy the smart contract, and run the frontend app locally.
+BallotCast is a decentralized voting system built on the Ethereum Sepolia testnet using a Solidity smart contract and a React frontend application that incorporates a commit-reveal scheme for additional election integrity and security. This README provides step-by-step instructions to set up the project, deploy the smart contract, and run the frontend app locally.
 
 ---
 
@@ -172,7 +172,7 @@ After connecting your wallet, you will be prompted or able to input the deployed
        - contract computes: keccak256(voterAddress + candidateIndex + nonce)
        - Matches against stored commitment <br />
 
-  * The commit-reveal scheme is a feature that ensures that votes are kept hidden until the election administrator starts the reveal phase. Also voting may only commence when the administrator starts the commit phase, which is ended once the reveal phase it started.
+The commit-reveal scheme is a feature that ensures that votes are kept hidden until the election administrator starts the reveal phase. Also voting may only commence when the administrator starts the commit phase, which is ended once the reveal phase it started. Since we were unable to develop separate administrator and voter dashboards, the commit-reveal functionality is not available on the front-end application. However it works flawlessly in the backend and is demonstrated in `tests/`
 
 ---
 
